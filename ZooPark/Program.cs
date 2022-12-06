@@ -1,38 +1,55 @@
 using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace ZooPark
 {
     internal class Program
     {
-        static void Main(string[] args)
+        static void Main()
         {
-            bool IsWork = true;
-            bool SelectionAviary = true;
-            int MinimumValue = 0;
-            ZooPark ZooPark = new ZooPark();
-            ConsoleKey ExitButton = ConsoleKey.Enter;
+            ZooPark zooPark = new ZooPark();
+            zooPark.Start();
+        }
+    }
 
-            while (IsWork)
+    class ZooPark
+    {
+        private List<Aviary> _aviaries = new List<Aviary>();
+        private bool _isWork = true;
+        private bool _selectionAviary = true;
+        private int _minimumValue = 0;
+        private ConsoleKey _exitButton = ConsoleKey.Enter;
+
+        public ZooPark()
+        {
+            _aviaries.Add(new Aviary("Львы", "Рычат", 5));
+            _aviaries.Add(new Aviary("Антилопы", "Цокают", 3));
+            _aviaries.Add(new Aviary("Зебры", "Брыгаются", 7));
+            _aviaries.Add(new Aviary("Верблюды", "Харкаются", 9));
+            _aviaries.Add(new Aviary("Бегемоты", "Зевают", 2));
+            _aviaries.Add(new Aviary("Пингвины", "Хлопают в ладоши", 10));
+            _aviaries.Add(new Aviary("Крокодилы", "Скрипят зубами", 1));
+        }
+
+        public void Start()
+        {
+            while (_isWork)
             {
                 Console.WriteLine("Добро пожаловать в зоопарк.\nВыберите к какому вольеру подойти");
 
-                for (int i = 0; i < ZooPark.ReturnAmountAviary().Count; i++)
+                for (int i = 0; i < _aviaries.Count; i++)
                 {
-                    Console.WriteLine($"{i + 1} -  {ZooPark.ReturnAmountAviary()[i].NameAviary}");
+                    Console.WriteLine($"{i + 1} -  {_aviaries[i].Name}");
                 }
 
-                while (SelectionAviary == true)
+                while (_selectionAviary == true)
                 {
                     int.TryParse(Console.ReadLine(), out int NumberAvary);
 
-                    if (MinimumValue < NumberAvary && NumberAvary - 1 < ZooPark.ReturnAmountAviary().Count)
+                    if (_minimumValue < NumberAvary && NumberAvary - 1 < _aviaries.Count)
                     {
-                        ZooPark.ReturnAmountAviary()[NumberAvary - 1].ShowInfo();
-                        SelectionAviary = false;
+                        _aviaries[NumberAvary - 1].ShowInfo();
+                        _selectionAviary = false;
                     }
                     else
                     {
@@ -42,57 +59,78 @@ namespace ZooPark
 
                 Console.WriteLine($"Вы хотите выйти из программы?Нажмите Enter.\nДля продолжение работы нажмите любую другую клавишу");
 
-                if (Console.ReadKey().Key == ExitButton)
+                if (Console.ReadKey().Key == _exitButton)
                 {
-                    IsWork = false;
+                    _isWork = false;
                     Console.WriteLine("Вы вышли из программы");
                 }
 
-                SelectionAviary = true;
+                _selectionAviary = true;
                 Console.Clear();
             }
         }
     }
 
-    class ZooPark
-    {
-        private List<Aviary> _aviaries = new List<Aviary>() { new Aviary("Львы", 10, "Мужской пол", "Рычат"), new Aviary("Антилопы", 5, "Женский пол", "Цокают"), new Aviary("Зебры", 3, "Женский пол", "Брыгаются"), new Aviary("Верблюды", 4, "Мужской пол", "Харкаются"), new Aviary("Бегемоты", 6, "Мужской пол", "Зевают"), new Aviary("Пингвины", 7, "Мужской пол", "Хлопают в ладоши"), new Aviary("Крокодилы", 8, "Мужской пол", "Скрипят зубами") };
-
-        public List<Aviary> ReturnAmountAviary()
-        {
-            return _aviaries;
-        }
-    }
-
     class Aviary
     {
-        private Animals _animals;
+        private List<Animal> _animal = new List<Animal>();
 
-        public string NameAviary { get; set; }
-        public int NumberAnimal { get; set; }
+        public string SoundAnimal { get; private set; }
+        public string Name { get; private set; }
+        public int NumberAnimal { get; private set; }
 
-        public Aviary(string nameAviary, int numberAnimal, string Gender, string SoundAnimal)
+        public Aviary(string nameAviary, string soundAnimal, int numberAnimal)
         {
-            NameAviary = nameAviary;
+            SoundAnimal = soundAnimal;
+            Name = nameAviary;
             NumberAnimal = numberAnimal;
-            _animals = new Animals(Gender, SoundAnimal);
+            CreateAnimal();
+        }
+
+        public void CreateAnimal()
+        {
+            int numberGender;
+            Random random = new Random();
+
+            for (int i = 0; i < NumberAnimal; i++)
+            {
+                numberGender = random.Next(1, 3);
+                Animal animal = new Animal();
+                animal.SetGender(numberGender);
+                _animal.Add(animal);
+            }
         }
 
         public void ShowInfo()
         {
-            Console.WriteLine($"Вольер - {NameAviary}\n{NumberAnimal} - животных \n{_animals.Gender} \nЗвук - {_animals.SoundAnimal} ");
+            Console.WriteLine($"Вольер - {Name}\nКоличество животных {NumberAnimal}");
+
+            for (int i = 0; i < _animal.Count; i++)
+            {
+                Console.WriteLine($"{_animal[i].Gender} \nЗвук - {SoundAnimal} ");
+            }
         }
     }
 
-    class Animals
+    class Animal
     {
-        public string Gender { get; set; }
-        public string SoundAnimal { get; set; }
+        private const int FirstNumberGender = 1;
+        private const int SecondNumberGender = 2;
+        private const string FirstGender = "Мужской пол";
+        private const string SecondGender = "Женский пол";
 
-        public Animals(string gender, string soundAnimal)
+        public string Gender { get; private set; }
+
+        public void SetGender(int randomGender)
         {
-            Gender = gender;
-            SoundAnimal = soundAnimal;
+            if (randomGender == FirstNumberGender)
+            {
+                Gender = FirstGender;
+            }
+            else if (randomGender == SecondNumberGender)
+            {
+                Gender = SecondGender;
+            }
         }
     }
 }
