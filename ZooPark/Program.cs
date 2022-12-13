@@ -14,10 +14,6 @@ namespace ZooPark
 
     class ZooPark
     {
-        private bool _isWork = true;
-        private bool _isSelectingAviary = true;
-        private ConsoleKey _exitButton = ConsoleKey.Enter;
-
         private List<Aviary> _aviaries = new List<Aviary>() 
         {
             new Aviary("Львы", "Рычат", 5),new Aviary("Антилопы", "Цокают", 3),
@@ -25,6 +21,9 @@ namespace ZooPark
             new Aviary("Бегемоты", "Зевают", 2),new Aviary("Пингвины", "Хлопают в ладоши", 10),
             new Aviary("Крокодилы", "Скрипят зубами", 1) 
         };
+        private bool _isWork = true;
+        private bool _isSelectingAviary = true;
+        private ConsoleKey _exitButton = ConsoleKey.Enter;
 
         public void Start()
         {
