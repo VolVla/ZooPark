@@ -14,22 +14,17 @@ namespace ZooPark
 
     class ZooPark
     {
-        private List<Aviary> _aviaries = new List<Aviary>();
         private bool _isWork = true;
-        private bool _selectionAviary = true;
-        private int _minimumValue = 0;
+        private bool _isSelectingAviary = true;
         private ConsoleKey _exitButton = ConsoleKey.Enter;
 
-        public ZooPark()
+        private List<Aviary> _aviaries = new List<Aviary>() 
         {
-            _aviaries.Add(new Aviary("Львы", "Рычат", 5));
-            _aviaries.Add(new Aviary("Антилопы", "Цокают", 3));
-            _aviaries.Add(new Aviary("Зебры", "Брыгаются", 7));
-            _aviaries.Add(new Aviary("Верблюды", "Харкаются", 9));
-            _aviaries.Add(new Aviary("Бегемоты", "Зевают", 2));
-            _aviaries.Add(new Aviary("Пингвины", "Хлопают в ладоши", 10));
-            _aviaries.Add(new Aviary("Крокодилы", "Скрипят зубами", 1));
-        }
+            new Aviary("Львы", "Рычат", 5),new Aviary("Антилопы", "Цокают", 3),
+            new Aviary("Зебры", "Брыгаются", 7),new Aviary("Верблюды", "Харкаются", 9),
+            new Aviary("Бегемоты", "Зевают", 2),new Aviary("Пингвины", "Хлопают в ладоши", 10),
+            new Aviary("Крокодилы", "Скрипят зубами", 1) 
+        };
 
         public void Start()
         {
@@ -42,14 +37,14 @@ namespace ZooPark
                     Console.WriteLine($"{i + 1} -  {_aviaries[i].Name}");
                 }
 
-                while (_selectionAviary == true)
+                while (_isSelectingAviary == true)
                 {
-                    int.TryParse(Console.ReadLine(), out int NumberAvary);
+                    int.TryParse(Console.ReadLine(), out int numberAvary);
 
-                    if (_minimumValue < NumberAvary && NumberAvary - 1 < _aviaries.Count)
+                    if (0 < numberAvary && numberAvary - 1 < _aviaries.Count)
                     {
-                        _aviaries[NumberAvary - 1].ShowInfo();
-                        _selectionAviary = false;
+                        _aviaries[numberAvary - 1].ShowInfo();
+                        _isSelectingAviary = false;
                     }
                     else
                     {
@@ -65,7 +60,7 @@ namespace ZooPark
                     Console.WriteLine("Вы вышли из программы");
                 }
 
-                _selectionAviary = true;
+                _isSelectingAviary = true;
                 Console.Clear();
             }
         }
@@ -73,7 +68,7 @@ namespace ZooPark
 
     class Aviary
     {
-        private List<Animal> _animal = new List<Animal>();
+        private List<Animal> _animals = new List<Animal>();
 
         public string SoundAnimal { get; private set; }
         public string Name { get; private set; }
@@ -84,20 +79,12 @@ namespace ZooPark
             SoundAnimal = soundAnimal;
             Name = nameAviary;
             NumberAnimal = numberAnimal;
-            CreateAnimal();
-        }
-
-        public void CreateAnimal()
-        {
-            int numberGender;
             Random random = new Random();
 
             for (int i = 0; i < NumberAnimal; i++)
-            {
-                numberGender = random.Next(1, 3);
-                Animal animal = new Animal();
-                animal.SetGender(numberGender);
-                _animal.Add(animal);
+            { 
+                Animal animal = new Animal(random);
+                _animals.Add(animal);
             }
         }
 
@@ -105,31 +92,33 @@ namespace ZooPark
         {
             Console.WriteLine($"Вольер - {Name}\nКоличество животных {NumberAnimal}");
 
-            for (int i = 0; i < _animal.Count; i++)
+            for (int i = 0; i < _animals.Count; i++)
             {
-                Console.WriteLine($"{_animal[i].Gender} \nЗвук - {SoundAnimal} ");
+                Console.WriteLine($"{_animals[i].Gender} \nЗвук - {SoundAnimal} ");
             }
         }
     }
 
     class Animal
     {
-        private const int FirstNumberGender = 1;
-        private const int SecondNumberGender = 2;
-        private const string FirstGender = "Мужской пол";
-        private const string SecondGender = "Женский пол";
-
+        private List<string> _genders = new List<string>() {"Мужской пол","Женский пол" };
         public string Gender { get; private set; }
 
-        public void SetGender(int randomGender)
+        public Animal(Random random)
         {
-            if (randomGender == FirstNumberGender)
+            int randomGender = random.Next(0, _genders.Count);
+            SetGender(randomGender);
+        }
+
+        private void SetGender(int randomGender)
+        {
+            if (randomGender == _genders.IndexOf(_genders[0])) 
             {
-                Gender = FirstGender;
+                Gender = _genders[0];
             }
-            else if (randomGender == SecondNumberGender)
+            else if (randomGender == _genders.IndexOf(_genders[1]))
             {
-                Gender = SecondGender;
+                Gender = _genders[1];
             }
         }
     }
