@@ -1,29 +1,37 @@
 using System;
 using System.Collections.Generic;
 
-namespace ZooPark
+namespace Zoo
 {
     internal class Program
     {
         static void Main()
         {
-            ZooPark zooPark = new ZooPark();
+            Zoo zooPark = new Zoo();
             zooPark.Start();
         }
     }
 
-    class ZooPark
+    class Zoo
     {
-        private List<Aviary> _aviaries = new List<Aviary>() 
+        private List<Aviary> _aviaries = new List<Aviary>();
+        private bool _isWork;
+        private bool _isSelectingAviary;
+        private ConsoleKey _exitButton;
+
+        public Zoo()
         {
-            new Aviary("Львы", "Рычат", 5),new Aviary("Антилопы", "Цокают", 3),
-            new Aviary("Зебры", "Брыгаются", 7),new Aviary("Верблюды", "Харкаются", 9),
-            new Aviary("Бегемоты", "Зевают", 2),new Aviary("Пингвины", "Хлопают в ладоши", 10),
-            new Aviary("Крокодилы", "Скрипят зубами", 1) 
-        };
-        private bool _isWork = true;
-        private bool _isSelectingAviary = true;
-        private ConsoleKey _exitButton = ConsoleKey.Enter;
+            _isWork = true;
+            _isSelectingAviary = true;
+            _exitButton = ConsoleKey.Enter;
+            _aviaries.Add(new Aviary("Львы", "Рычат", 5));
+            _aviaries.Add(new Aviary("Антилопы", "Цокают", 3));
+            _aviaries.Add(new Aviary("Зебры", "Брыгаются", 7));
+            _aviaries.Add(new Aviary("Верблюды", "Харкаются", 9));
+            _aviaries.Add(new Aviary("Бегемоты", "Зевают", 2));
+            _aviaries.Add(new Aviary("Пингвины", "Хлопают в ладоши", 10));
+            _aviaries.Add(new Aviary("Крокодилы", "Скрипят зубами", 1));
+        }
 
         public void Start()
         {
@@ -81,7 +89,7 @@ namespace ZooPark
             Random random = new Random();
 
             for (int i = 0; i < NumberAnimal; i++)
-            { 
+            {
                 Animal animal = new Animal(random);
                 _animals.Add(animal);
             }
@@ -100,24 +108,29 @@ namespace ZooPark
 
     class Animal
     {
-        private List<string> _genders = new List<string>() {"Мужской пол","Женский пол" };
+        private string _genderFist;
+        private string _genderSecond;
+        private int _genderNumberFist;
+        private int _genderNumberSecond;
+        private int randomGender;
+
         public string Gender { get; private set; }
 
         public Animal(Random random)
         {
-            int randomGender = random.Next(0, _genders.Count);
-            SetGender(randomGender);
-        }
+            _genderFist = "Мужской пол";
+            _genderSecond = "Женский пол";
+            _genderNumberFist = 0;
+            _genderNumberSecond = 1;
+            randomGender = random.Next(_genderNumberFist, _genderNumberSecond + 1);
 
-        private void SetGender(int randomGender)
-        {
-            if (randomGender == _genders.IndexOf(_genders[0])) 
+            if (randomGender == _genderNumberFist)
             {
-                Gender = _genders[0];
+                Gender = _genderFist;
             }
-            else if (randomGender == _genders.IndexOf(_genders[1]))
+            else if (randomGender == _genderNumberSecond)
             {
-                Gender = _genders[1];
+                Gender = _genderSecond;
             }
         }
     }
