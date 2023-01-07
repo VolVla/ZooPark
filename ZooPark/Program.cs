@@ -14,47 +14,45 @@ namespace Zoo
 
     class Zoo
     {
-        private const int SelectAviary = 1;
-        private const int Exit = 2;
+        private const string CommandSelectAviary = "1";
+        private const string CommandExit = "2";
+        private bool _isWork = true;
         private List<Aviary> _aviaries = new List<Aviary>();
 
         public Zoo()
         {
-            _aviaries.Add(new Aviary("Львы", "Лев", 5));
-            _aviaries.Add(new Aviary("Антилопы", "Антилопа", 3));
-            _aviaries.Add(new Aviary("Зебры", "Зебра", 7));
-            _aviaries.Add(new Aviary("Верблюды", "Верблюд", 9));
-            _aviaries.Add(new Aviary("Бегемоты", "Бегемот", 2));
-            _aviaries.Add(new Aviary("Пингвины", "Пингвин", 10));
-            _aviaries.Add(new Aviary("Крокодилы", "Крокодил", 1));
+            _aviaries.Add(new Aviary("Львы", "Лев", 5, "Рычат", 2, 3));
+            _aviaries.Add(new Aviary("Антилопы", "Антилопа", 3, "Цокают", 1, 2));
+            _aviaries.Add(new Aviary("Зебры", "Зебра", 7, "Брыгаются", 5, 2));
+            _aviaries.Add(new Aviary("Верблюды", "Верблюд", 9, "Харкаются", 7, 2));
+            _aviaries.Add(new Aviary("Бегемоты", "Бегемот", 2, "Зевают", 1, 1));
+            _aviaries.Add(new Aviary("Пингвины", "Пингвин", 10, "Хлопают в ладоши", 5, 5));
+            _aviaries.Add(new Aviary("Крокодилы", "Крокодил", 2, "Скрипят зубами", 1, 1));
         }
 
         public void Start()
         {
-            while (true)
+            while (_isWork == true)
             {
-                Console.WriteLine($"Добро пожаловать в зоопарк.\nДля того чтоб подойти к вольеру напишите {SelectAviary}.\nЕсли вы хотите выйти из зоопарка напишите {Exit}");
-                int.TryParse(Console.ReadLine(), out int input);
+                Console.WriteLine($"Добро пожаловать в зоопарк.\nДля того чтоб подойти к вольеру напишите {CommandSelectAviary}.\nЕсли вы хотите выйти из зоопарка напишите {CommandExit}");
 
-                switch (input)
+                switch (Console.ReadLine())
                 {
-                    case SelectAviary:
-                        SelectedAviary();
+                    case CommandSelectAviary:
+                        SelectAviary();
+                        break;
+                    case CommandExit:
+                        Console.WriteLine("Вы вышли из программы");
+                        _isWork = false;
                         break;
                     default:
                         Console.WriteLine("Выберите к какому вольеру подойти или уйдите из Зоопарка");
                         break;
                 }
-
-                if (input == Exit)
-                {
-                    Console.WriteLine("Вы вышли из программы");
-                    break;
-                }
             }
         }
 
-        private void SelectedAviary()
+        private void SelectAviary()
         {
             Console.Clear();
 
@@ -80,34 +78,16 @@ namespace Zoo
     class Aviary
     {
         private List<Animal> _animals = new List<Animal>();
-        private List<string> _soundsAnimals = new List<string>();
-        private int _randomGender;
-        private int _randomSound;
-        private int _genderNumberFist;
-        private int _genderNumberSecond;
         private string _genderFist;
         private string _genderSecond;
-        private string _genderAnimal;
-        private string _soundAnimal;
 
-        public Aviary(string nameAviary, string nameAnimal, int numberAnimal)
+        public Aviary(string nameAviary, string nameAnimal, int numberAnimal, string soundAnimal, int numberAnimalFirstGender, int numberAnimalSecondGender)
         {
             _genderFist = "Мужской пол";
             _genderSecond = "Женский пол";
-            _genderAnimal = "";
-            _genderNumberFist = 0;
-            _genderNumberSecond = 1;
             Name = nameAviary;
             NumberAnimal = numberAnimal;
-            Random random = new Random();
-            _soundsAnimals.Add("Рычат");
-            _soundsAnimals.Add("Цокают");
-            _soundsAnimals.Add("Брыгаются");
-            _soundsAnimals.Add("Харкаются");
-            _soundsAnimals.Add("Зевают");
-            _soundsAnimals.Add("Хлопают в ладоши");
-            _soundsAnimals.Add("Скрипят зубами");
-            CreateAnimals(random, nameAnimal);
+            CreateAnimals(nameAnimal, soundAnimal, numberAnimalFirstGender, numberAnimalSecondGender);
         }
 
         public string Name { get; private set; }
@@ -123,24 +103,17 @@ namespace Zoo
             }
         }
 
-        private void CreateAnimals(Random random, string nameAnimal)
+        private void CreateAnimals(string nameAnimal, string soundAnimal, int numberAnimalFirstGender, int numberAnimalSecondGender)
         {
-            for (int i = 0; i < NumberAnimal; i++)
+            CreateAnimal(numberAnimalFirstGender, _genderFist, soundAnimal, nameAnimal);
+            CreateAnimal(numberAnimalSecondGender, _genderSecond, soundAnimal, nameAnimal);
+        }
+
+        private void CreateAnimal(int numberAnimal, string nameGender, string soundAnimal, string nameAnimal)
+        {
+            for (int i = 0; i < numberAnimal; i++)
             {
-                _randomGender = random.Next(_genderNumberFist, _genderNumberSecond + 1);
-                _randomSound = random.Next(0, _soundsAnimals.Count);
-                _soundAnimal = _soundsAnimals[_randomSound];
-
-                if (_randomGender == _genderNumberFist)
-                {
-                    _genderAnimal = _genderFist;
-                }
-                else if (_randomGender == _genderNumberSecond)
-                {
-                    _genderAnimal = _genderSecond;
-                }
-
-                Animal animal = new Animal(_genderAnimal, _soundAnimal, nameAnimal);
+                Animal animal = new Animal(nameGender, soundAnimal, nameAnimal);
                 _animals.Add(animal);
             }
         }
