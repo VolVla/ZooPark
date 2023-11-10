@@ -78,13 +78,11 @@ namespace Zoo
     class Aviary
     {
         private List<Animal> _animals = new List<Animal>();
-        private string _genderFist;
-        private string _genderSecond;
+        private string _genderFist = "Мужской пол";
+        private string _genderSecond = "Женский пол";
 
         public Aviary(string nameAviary, string nameAnimal, int numberAnimal, string soundAnimal, int numberAnimalFirstGender, int numberAnimalSecondGender)
         {
-            _genderFist = "Мужской пол";
-            _genderSecond = "Женский пол";
             Name = nameAviary;
             NumberAnimal = numberAnimal;
             CreateAnimals(nameAnimal, soundAnimal, numberAnimalFirstGender, numberAnimalSecondGender);
@@ -99,7 +97,7 @@ namespace Zoo
 
             for (int i = 0; i < _animals.Count; i++)
             {
-                Console.WriteLine($"{_animals[i].Gender} \nЗвук - {_animals[i].SoundAnimal}\nТип животного - {_animals[i].Name}");
+                Console.WriteLine($"{_animals[i].Gender} \nЗвук - {_animals[i].Sound}\nТип животного - {_animals[i].Name}");
             }
         }
 
@@ -124,12 +122,12 @@ namespace Zoo
         public Animal(string gender, string sound, string name)
         {
             Gender = gender;
-            SoundAnimal = sound;
+            Sound = sound;
             Name = name;
         }
 
         public string Name { get; private set; }
-        public string SoundAnimal { get; private set; }
+        public string Sound { get; private set; }
         public string Gender { get; private set; }
     }
 }
